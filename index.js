@@ -7,9 +7,9 @@ const morgan = require('morgan');
 //const students = require('./controllers/students');
 const studentroute = require('./routes/studentroute')
 const usersroute = require('./routes/usersroute');
-const dotenv = require('./.env');
-
-dotenv.config();
+//const dotenv = require('./.env');
+require ('dotenv').config();
+//dotenv.config();
 
 
 app.use(express.json());
