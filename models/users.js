@@ -2,7 +2,7 @@
     {
         id: 1, 
         username: 'hugues@gmail.com',
-        password: '1234',
+        password: '12345',
     },
     {
         id: 2, 

@@ -20,7 +20,7 @@ module.exports = class usersController{
             );
         }
 
-        const user = await users.filter(
+        const user = users.filter(
             (usermail) => usermail.username.toLowerCase() === req.body.username.toLowerCase(),
         );
         if (user.length>0){
@@ -42,7 +42,7 @@ module.exports = class usersController{
             const hideitems = {...addUser};
             delete hideitems.password;
 
-           const usermail = await users.filter(
+           const usermail = users.filter(
                (usermail) => usermail.username.toLocaleLowerCase() === req.body.username.toLowerCase(),
            ); 
 
@@ -52,6 +52,7 @@ module.exports = class usersController{
            );
             const data = {
                 token,
+                hideitems,
             };
 
             return response.response(
@@ -110,15 +111,15 @@ module.exports = class usersController{
                     true,
                 );
             }
-        }else{
-            return response.response(
-                    res,
-                    401,
-                    'error',
-                    'invalid username or password',
-                    true,
-            );
-            }    
+        }//else{
+           // return response.response(
+             //       res,
+               //     401,
+                 //   'error',
+                   // 'invalid username or password',
+                   // true,
+            //);
+           // }    
 
     }
 
