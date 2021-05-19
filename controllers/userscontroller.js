@@ -7,16 +7,16 @@ const response = require("../helpers/response");
 module.exports = class usersController {
   //register a new user
   static async addUser(req, res) {
-    const { error } = validateUser(req.body);
-    if (error) {
-      return response.response(
-        res,
-        422,
-        "error",
-        `${error.details[0].message}`,
-        true
-      );
-    }
+    //const { error } = validateUser(req.body);
+    //if (error) {
+     // return response.response(
+       // res,
+        //422,
+        //"error",
+        //`${error.details[0].message}`,
+        //true
+      //);
+    //}
 
     const user = users.filter(
       (usermail) =>
