@@ -5,13 +5,13 @@ This Repo is strictly for practicing RESTful APis with node js and express
 
 ## Features
 
-1.New users can create accounts
-2.Users can Log in 
-3.Users can register a student
-4.Users can get all registered students
-5.Users can get a single student
-5.Users can update a student
-7.Users can delete a student
+1.New users can create accounts.
+2.Users can Log in.
+3.Users can register a student.
+4.Users can get all registered students.
+5.Users can get a single student.
+5.Users can update a student.
+7.Users can delete a student.
 
 #**Technologies**
 
