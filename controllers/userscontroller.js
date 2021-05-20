@@ -22,16 +22,20 @@ module.exports = class usersController {
     } else {
       const { username, password } = req.body;
 
+      const saltRounds = 10;
+      const newPassword = await bcrypt.hash(password, saltRounds);
+      console.log(newPassword);
       const addUser = {
         id: users.length + 1,
         username,
-        password,
+        newPassword,
       };
-      const salt = await bcrypt.genSalt(10);
-      addUser.password = await bcrypt.hash(addUser.password, salt);
       users.push(addUser);
-      const hideitems = { ...addUser };
-      delete hideitems.password;
+      const userInfo = { ...addUser };
+      delete userInfo.newPassword;
+
+      // const salt = await bcrypt.genSalt(10);
+      //addUser.password = await bcrypt.hash(addUser.password, salt);
 
       const usermail = users.filter(
         (usermail) =>
@@ -45,7 +49,7 @@ module.exports = class usersController {
       );
       const data = {
         token,
-        hideitems,
+        userInfo,
       };
 
       return response.response(
@@ -63,7 +67,7 @@ module.exports = class usersController {
   //user login
 
   static async loginUser(req, res) {
-    const {password} = req.body;
+    const { password } = req.body;
 
     const user = users.filter(
       (usermail) =>
@@ -72,54 +76,33 @@ module.exports = class usersController {
     );
     console.log(req.body.username);
     console.log(password);
-    
+
     if (user.length > 0) {
-      //from here (things to fix)
-      bcrypt.compare(password, user[0].password,function (error,isMatch){
-        
-        if (error) {
-    throw error
-  } else if (isMatch) {
-    
-     return response.response(
+      if (bcrypt.compareSync(password, user[0].newPassword)) {
+        const token = jwt.sign(
+          { id: user[0].id, username: user[0].username },
+          process.env.JWT
+        );
+        const data = { token };
+        response.response(res, 200, "User successfully Logein", data, false);
+      } else {
+        return response.response(
           res,
           401,
           "error",
-          "invalid username or password",
+          "Invalid username or password",
           true
-          );
-    
-    //console.log("Password doesn't match!")
-  } else {
-
-    //console.log("Password matches!")
-
-
-        const token = jwt.sign(
-          { id: user[0], username: user[0].password },
-          process.env.JWT,
         );
-
-        const data = {
-          token,
-        };
-
-        return response.response(res, 200, "success", data, false);
-
-
-  }
-      });
-        
-        
-    }//else{
-     //return response.response(
-       //    res,
-        // 401,
-       //'error',
-     //'invalid username or password',
-    // true,
-    //);
-    // }
-  
+      }
+    } else {
+      return response.response(
+        res,
+        401,
+        "error",
+        "Invalid username or password",
+        true
+      );
+    }
+    return response;
   }
 }
