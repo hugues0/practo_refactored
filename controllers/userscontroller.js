@@ -63,51 +63,63 @@ module.exports = class usersController {
   //user login
 
   static async loginUser(req, res) {
-    const { password } = req.body;
-    const { error } = validateUser(req.body);
-    if (error) {
-      return response.response(
-        res,
-        422,
-        "error"`${error.details[0].message}`,
-        true
-      );
-    }
+    const {password} = req.body;
 
-    const user = await users.filter(
+    const user = users.filter(
       (usermail) =>
-        usermail.username.toLocaleLowerCase() ===
+        usermail.username.toLowerCase() ===
         req.body.username.toLowerCase().trim()
     );
-    if (user.length > 1) {
-      if (bcrypt.compareSync(password, user[0].password)) {
-        const token = jwt.sign(
-          { id: user[0], username: user[0].password },
-          process.env.JWT
-        );
-
-        const responses = {
-          token,
-        };
-
-        return response.response(res, 200, "success", responses, false);
-      } else {
-        return response.response(
+    console.log(req.body.username);
+    console.log(password);
+    
+    if (user.length > 0) {
+      //from here (things to fix)
+      bcrypt.compare(password, user[0].password,function (error,isMatch){
+        
+        if (error) {
+    throw error
+  } else if (isMatch) {
+    
+     return response.response(
           res,
           401,
           "error",
           "invalid username or password",
           true
+          );
+    
+    //console.log("Password doesn't match!")
+  } else {
+
+    //console.log("Password matches!")
+
+
+        const token = jwt.sign(
+          { id: user[0], username: user[0].password },
+          process.env.JWT,
         );
-      }
-    } //else{
-    // return response.response(
-    //       res,
-    //     401,
-    //   'error',
-    // 'invalid username or password',
+
+        const data = {
+          token,
+        };
+
+        return response.response(res, 200, "success", data, false);
+
+
+  }
+      });
+        
+        
+    }//else{
+     //return response.response(
+       //    res,
+        // 401,
+       //'error',
+     //'invalid username or password',
     // true,
     //);
     // }
+  
   }
-};
+}
