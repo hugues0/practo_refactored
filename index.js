@@ -18,6 +18,9 @@ app.use(morgan("tiny"));
 app.use("/api/v1", studentroute);
 app.use("/api/v1", usersroute);
 app.use(logger);
+app.use("*", (req, res) => {
+  response.response(res, 404, "error", "resource not found", true);
+});
 //app.use(auth);
 
 const port = process.env.PORT || 3000;
