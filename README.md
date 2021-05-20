@@ -3,7 +3,7 @@
 This Repo is strictly for practicing RESTful APis with node js and express
 
 
-## Features
+## Features.
 
 1.New users can create accounts.
 2.Users can Log in.
