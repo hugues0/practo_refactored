@@ -84,7 +84,7 @@ module.exports = class usersController {
           process.env.JWT
         );
         const data = { token };
-        response.response(res, 200, "User successfully Logged in", data, false);
+        response.response(res, 200, `User ${user[0].username} successfully logged in`, data, false);
       } else {
         return response.response(
           res,
