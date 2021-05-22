@@ -45,7 +45,7 @@ module.exports = class usersController {
 
       const token = jwt.sign(
         { id: usermail[0].id, username: usermail[0].username },
-        process.env.JWT
+        process.env.JWT, {expiresIn: 1200}
       );
       const data = {
         token,
@@ -81,7 +81,7 @@ module.exports = class usersController {
       if (bcrypt.compareSync(password, user[0].newPassword)) {
         const token = jwt.sign(
           { id: user[0].id, username: user[0].username },
-          process.env.JWT
+          process.env.JWT,{expiresIn: 1200 }
         );
         const data = { token };
         response.response(res, 200, `User ${user[0].username} successfully logged in`, data, false);
