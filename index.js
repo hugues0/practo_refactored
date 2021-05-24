@@ -1,15 +1,14 @@
 const express = require("express");
 const app = express();
-//const Joi = require('joi');
+
 const logger = require("./middlewares/logger");
-//const auth = require ('./middlewares/auth');
+
 const morgan = require("morgan");
-//const students = require('./controllers/students');
+
 const studentroute = require("./routes/studentroute");
 const usersroute = require("./routes/usersroute");
-//const dotenv = require('./.env');
+
 require("dotenv").config();
-//dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +20,6 @@ app.use(logger);
 app.use("*", (req, res) => {
   response.response(res, 404, "error", "resource not found", true);
 });
-//app.use(auth);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));

@@ -6,7 +6,6 @@ const studentsController = require('../controllers/students');
 
 const { getAll, postIn, getById,updateById, deleteById } = studentsController;
 
-//const router = Router();
 
 router.post('/students',auth, postIn);
 router.put('/students/:id',auth,updateById);
