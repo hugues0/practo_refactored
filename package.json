@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db-migrate": "npx sequelize db:migrate",
+    "demigrate": "sequelize db:migrate:undo:all",
+    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,10 @@
     "joi": "^13.1.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
   }
 }
