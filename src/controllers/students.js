@@ -70,7 +70,7 @@ module.exports = class studentsController {
       }
       return response.response(res, 200, "Student found", student, false);
     } catch (error) {
-      return response.response(res, 500, "", error.details[0].message, true);
+      return response.response(res, 500, "", error.message, true);
     }
   }
 
