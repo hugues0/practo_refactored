@@ -1,6 +1,5 @@
 const sequelize = require("sequelize");
 const db = require("../db/models");
-
 const { op, where, cast, col } = sequelize;
 
 module.exports = class StudentsServices {
@@ -9,15 +8,30 @@ module.exports = class StudentsServices {
   }
 
   static async getStudents() {
-    try {
-      const searchStudents = await db.student.findAndCountAll();
+   /*  try{
+    return await db.student
+      .findAll()
+      .then((student) => res.status(200).send(student));
+    }catch(error){
+      res.status(400).send(error);
+    }
+ */
+
+
+     try {
+
+      console.log("===========>>", model);
+      const searchStudents = await db.student.findAll();
       if (!searchStudents) return null;
       return searchStudents;
     } catch (error) {
       return undefined;
-    }
+    } 
   }
 
+  static async getStudents02(){
+   return await db.student.findAndCountAll();
+  }
   static async findStudentById(id) {
     try {
       const student = await db.student.findOne({ where: { id } });

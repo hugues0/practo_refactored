@@ -10,7 +10,9 @@ const { getAll, postIn, getById,updateById, deleteById } = studentsController;
 router.post('/students',auth, postIn);
 router.put('/students/:id',auth,updateById);
 router.delete('/students/:id',auth,deleteById);
-router.get('/students',auth,getAll);
+router.get('/students'
+// ,auth
+,getAll);
 router.get('/students/:id',auth,getById);
 
 module.exports = router;

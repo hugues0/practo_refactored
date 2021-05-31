@@ -2,10 +2,10 @@
 const Model = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  const Students = sequelize.define("Students", {
+  const student = sequelize.define("student", {
     name: { type: DataTypes.STRING, allownull: false },
   });
 
-  Students.associate = function (models) {};
-  return Students;
+  student.associate = function (models) {};
+  return student;
 };
