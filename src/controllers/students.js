@@ -1,6 +1,7 @@
 const express = require("express");
 //const router = express.Router();
 //const Joi = require("joi");
+require("dotenv").config();
 const validateStudent = require("../middlewares/studentvalidation");
 const students = require("../models/studentsmodel");
 const StudentServices = require("../services/students");
@@ -10,7 +11,8 @@ module.exports = class studentsController {
   static async getAll(req, res) {
     // res.send(students);
     try {
-      const getStudents = await StudentServices.getStudents();
+      const getStudents = await StudentServices.getStudents02();
+      console.log("===========>>", getStudents.rows);
       if (getStudents.count <= 0) {
         const data = null;
         return response.response(
@@ -29,7 +31,7 @@ module.exports = class studentsController {
         false
       );
     } catch (error) {
-      return response.response(res, 500, "error", error, true);
+      return response.response(res, 500, "error", error.message, true);
     }
   }
 
@@ -68,7 +70,7 @@ module.exports = class studentsController {
       }
       return response.response(res, 200, "Student found", student, false);
     } catch (error) {
-      return response.response(res, 500, "", error.details[0].message, true);
+      return response.response(res, 500, "", error.message, true);
     }
   }
 
