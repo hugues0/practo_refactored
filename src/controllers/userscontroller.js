@@ -3,20 +3,19 @@ const bcrypt = require("bcrypt");
 const validateUser = require("../middlewares/usersvalidation");
 const users = require("../models/users");
 const response = require("../helpers/response");
+const usersServices = require('../services/users');
 
 module.exports = class usersController {
   //register a new user
   static async addUser(req, res) {
-    const user = users.filter(
-      (usermail) =>
-        usermail.username.toLowerCase() === req.body.username.toLowerCase()
-    );
-    if (user.length > 0) {
+    const user = await usersServices.findUserByUsername(req.body.name);
+    
+    if (user.count > 0) {
       response.response(
         res,
         409,
         "error",
-        "User with given email already exists",
+        "User with given Username/Email already exists",
         true
       );
     } else {
@@ -34,8 +33,7 @@ module.exports = class usersController {
       const userInfo = { ...addUser };
       delete userInfo.newPassword;
 
-      // const salt = await bcrypt.genSalt(10);
-      //addUser.password = await bcrypt.hash(addUser.password, salt);
+
 
       const usermail = users.filter(
         (usermail) =>
@@ -45,7 +43,7 @@ module.exports = class usersController {
 
       const token = jwt.sign(
         { id: usermail[0].id, username: usermail[0].username },
-        process.env.JWT, {expiresIn: 1200}
+        process.env.JWT, {expiresIn: 12000}
       );
       const data = {
         token,
@@ -81,7 +79,7 @@ module.exports = class usersController {
       if (bcrypt.compareSync(password, user[0].newPassword)) {
         const token = jwt.sign(
           { id: user[0].id, username: user[0].username },
-          process.env.JWT,{expiresIn: 1200 }
+          process.env.JWT,{expiresIn: 12000 }
         );
         const data = { token };
         response.response(res, 200, `User ${user[0].username} successfully logged in`, data, false);

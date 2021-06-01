@@ -57,8 +57,9 @@ module.exports = class studentsController {
 
   static async getById(req, res) {
     try {
+      
       const student = await StudentServices.findStudentById(req.params.id);
-      if (student.count <= 0) {
+      if ( !student || student.count <= 0 ) {
         const data = null;
         return response.response(
           res,
@@ -76,8 +77,9 @@ module.exports = class studentsController {
 
   static async updateById(req, res) {
     try {
+
       const student = await StudentServices.findStudentById(req.params.id);
-      if (student.count <= 0) {
+      if (!student || student.count <= 0) {
         const data = null;
         return response.response(
           res,
@@ -89,13 +91,15 @@ module.exports = class studentsController {
       }
       const { error } = validateStudent(req.body);
       if (error) return res.status(404).send(error.details[0].message);
-      const newStudent = await StudentServices.updateUserById(req.body);
+      const newName = req.body.name;
+      const id = req.params.id;
+      const updateStudent = await StudentServices.updateStudentById(id,newName);
       return response.response(
         res,
         201,
         "Student successfully updated",
         {
-          name: newStudent.name,
+          name: newName,
         },
         false
       );
@@ -107,7 +111,7 @@ module.exports = class studentsController {
   static async deleteById(req, res) {
     try {
       const student = await StudentServices.findStudentById(req.params.id);
-      if (student.count <= 0) {
+      if (!student || student.count <= 0) {
         const data = null;
         return response.response(
           res,
