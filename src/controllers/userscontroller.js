@@ -3,65 +3,40 @@ const bcrypt = require("bcrypt");
 const validateUser = require("../middlewares/usersvalidation");
 const users = require("../models/users");
 const response = require("../helpers/response");
+const UsersServices = require('../services/users');
+require("dotenv").config()
+//const bcrypt = require('bcrypt');
 
 module.exports = class usersController {
   //register a new user
   static async addUser(req, res) {
-    const user = users.filter(
-      (usermail) =>
-        usermail.username.toLowerCase() === req.body.username.toLowerCase()
+    let {username,password} = req.body;
+    const existUser = await UsersServices.findUserByEmail(username);
+    console.log(existUser);
+    if(existUser) return response.response(res,409,"error","User already exist in the database",true);
+    const saltRounds = 10;
+    password = await bcrypt.hash(password, saltRounds);
+    console.log(password);
+    const newUser = {username,password};
+    await UsersServices.createUser(newUser);
+    const userInfo = { ...newUser };
+    delete userInfo.password;
+    
+    const token = jwt.sign(
+        { username: newUser.username },
+        process.env.JWT, {expiresIn: 12000});
+    const data = {
+      token,
+      userInfo,
+    };
+    return response.response(
+      res,
+      201,
+      "New user created successfully",
+      data,
+      false
     );
-    if (user.length > 0) {
-      response.response(
-        res,
-        409,
-        "error",
-        "User with given email already exists",
-        true
-      );
-    } else {
-      const { username, password } = req.body;
-
-      const saltRounds = 10;
-      const newPassword = await bcrypt.hash(password, saltRounds);
-      console.log(newPassword);
-      const addUser = {
-        id: users.length + 1,
-        username,
-        newPassword,
-      };
-      users.push(addUser);
-      const userInfo = { ...addUser };
-      delete userInfo.newPassword;
-
-      // const salt = await bcrypt.genSalt(10);
-      //addUser.password = await bcrypt.hash(addUser.password, salt);
-
-      const usermail = users.filter(
-        (usermail) =>
-          usermail.username.toLocaleLowerCase() ===
-          req.body.username.toLowerCase()
-      );
-
-      const token = jwt.sign(
-        { id: usermail[0].id, username: usermail[0].username },
-        process.env.JWT, {expiresIn: 1200}
-      );
-      const data = {
-        token,
-        userInfo,
-      };
-
-      return response.response(
-        res,
-        201,
-        "New user created successfully",
-        data,
-        false
-      );
-    }
-
-    return response;
+    
   }
 
   //user login
@@ -81,7 +56,7 @@ module.exports = class usersController {
       if (bcrypt.compareSync(password, user[0].newPassword)) {
         const token = jwt.sign(
           { id: user[0].id, username: user[0].username },
-          process.env.JWT,{expiresIn: 1200 }
+          process.env.JWT,{expiresIn: 12000 }
         );
         const data = { token };
         response.response(res, 200, `User ${user[0].username} successfully logged in`, data, false);

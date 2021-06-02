@@ -19,8 +19,9 @@ module.exports = class StudentsServices {
   }
 
   static async getStudents02() {
-    return await db.student.findAndCountAll();
-    
+    return await db.student.findAndCountAll({
+      order:[['id','ASC']]
+    });
   }
   static async findStudentById(id) {
     try {
@@ -47,19 +48,9 @@ module.exports = class StudentsServices {
     }
   }
 
-  static async updateUserById(id) {
+  static async updateStudentById(id, name) {
     try {
-      const studentToUpdate = await db.student.findOne({ where: { id } });
-      if (studentToUpdate) {
-        await db.student.update(id, {
-          where: { id },
-        });
-      } else if (!studentToUpdate) {
-        return {
-          status: 404,
-          message: "The user with given id was not found",
-        };
-      }
+      return await db.student.update({ name }, { where: { id } });
     } catch (er) {
       return {
         status: 500,

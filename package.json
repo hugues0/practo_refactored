@@ -8,7 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db-migrate": "npx sequelize db:migrate",
     "demigrate": "sequelize db:migrate:undo:all",
-    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
+    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
+    "undo-seeds":"sequelize-cli db:seed:undo:all",
+    "seeders":"sequelize-cli db:seed:all"
+
   },
   "repository": {
     "type": "git",
