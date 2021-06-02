@@ -3,81 +3,87 @@ const bcrypt = require("bcrypt");
 const validateUser = require("../middlewares/usersvalidation");
 const users = require("../models/users");
 const response = require("../helpers/response");
-const UsersServices = require('../services/users');
-require("dotenv").config()
-//const bcrypt = require('bcrypt');
+const UsersServices = require("../services/users");
+require("dotenv").config();
+
 
 module.exports = class usersController {
   //register a new user
   static async addUser(req, res) {
-    let {username,password} = req.body;
-    const existUser = await UsersServices.findUserByEmail(username);
-    console.log(existUser);
-    if(existUser) return response.response(res,409,"error","User already exist in the database",true);
-    const saltRounds = 10;
-    password = await bcrypt.hash(password, saltRounds);
-    console.log(password);
-    const newUser = {username,password};
-    await UsersServices.createUser(newUser);
-    const userInfo = { ...newUser };
-    delete userInfo.password;
-    
-    const token = jwt.sign(
-        { username: newUser.username },
-        process.env.JWT, {expiresIn: 12000});
-    const data = {
-      token,
-      userInfo,
-    };
-    return response.response(
-      res,
-      201,
-      "New user created successfully",
-      data,
-      false
-    );
-    
+    try {
+      let { username, password } = req.body;
+      const existUser = await UsersServices.findUserByEmail(username);
+      console.log(existUser);
+      if (existUser)
+        return response.response(
+          res,
+          409,
+          "error",
+          "User already exist in the database",
+          true
+        );
+      const saltRounds = 10;
+      password = await bcrypt.hash(password, saltRounds);
+      console.log(password);
+      const newUser = { username, password };
+      await UsersServices.createUser(newUser);
+      const userInfo = { ...newUser };
+      delete userInfo.password;
+
+      const token = jwt.sign({ username: newUser.username }, process.env.JWT, {
+        expiresIn: 12000,
+      });
+      const data = {
+        token,
+        userInfo,
+      };
+      return response.response(
+        res,
+        201,
+        "New user created successfully",
+        data,
+        false
+      );
+    } catch (error) {
+      return error.message;
+    }
   }
 
   //user login
 
   static async loginUser(req, res) {
-    const { password } = req.body;
+    try {
+      const { username, password } = req.body;
 
-    const user = users.filter(
-      (usermail) =>
-        usermail.username.toLowerCase() ===
-        req.body.username.toLowerCase().trim()
-    );
-    console.log(req.body.username);
-    console.log(password);
-
-    if (user.length > 0) {
-      if (bcrypt.compareSync(password, user[0].newPassword)) {
-        const token = jwt.sign(
-          { id: user[0].id, username: user[0].username },
-          process.env.JWT,{expiresIn: 12000 }
-        );
-        const data = { token };
-        response.response(res, 200, `User ${user[0].username} successfully logged in`, data, false);
-      } else {
+      const userExist = await UsersServices.findUserByEmail(username);
+      if (!userExist)
         return response.response(
           res,
-          401,
+          404,
           "error",
-          "Invalid username or password",
+          "Invalid username,try again",
           true
         );
-      }
-    } else {
+      const passwordMatch = await bcrypt.compare(password, userExist.password);
+      if (!passwordMatch)
+        return res
+          .status(401)
+          .json({ status: 401, error: "Invalid password, try again" });
+      const { id } = userExist;
+
+      const token = jwt.sign({ id }, process.env.JWT, {
+        expiresIn: 12000,
+      });
+      const data = { id, username, token };
       return response.response(
         res,
-        401,
-        "error",
-        "Invalid username or password",
-        true
+        409,
+        "User successfully logged in",
+        data,
+        false
       );
+    } catch (error) {
+      return error.message;
     }
-    return response;
   }
-}
+};
