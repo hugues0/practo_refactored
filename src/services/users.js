@@ -3,12 +3,16 @@ const db = require("../db/models");
 
 module.exports = class UsersServices {
   static async createUser(newUser) {
-    return db.users(newUser);
+    try {
+      return await db.user.create(newUser);
+    } catch (er) {
+      return undefined;
+    }
   }
 
   static async findUserById(id) {
     try {
-      const user = await db.users.findOne({ where: { id } });
+      const user = await db.user.findOne({ where: { id } });
       if (!user) return null;
       return user;
     } catch (er) {
@@ -16,9 +20,9 @@ module.exports = class UsersServices {
     }
   }
 
-  static async findUserByUsername(username) {
+  static async findUserByEmail(username) {
     try {
-      const user = await db.users.findOne({ where: { username } });
+      const user = await db.user.findOne({ where: { username } });
       if (!user) return null;
       return user;
     } catch (er) {
@@ -28,7 +32,7 @@ module.exports = class UsersServices {
 
   static async deleteUserById(id) {
     try {
-      await db.users.destroy({ where: { id } });
+      await db.user.destroy({ where: { id } });
       return {
         status: 200,
         message: "User successfully deleted",
@@ -41,9 +45,9 @@ module.exports = class UsersServices {
     }
   }
 
-  static async updateStudentById(id, username,password) {
+  static async updateStudentById(id, username, password) {
     try {
-      return await db.users.update({ username,password }, { where: { id } });
+      return await db.user.update({ username, password }, { where: { id } });
     } catch (er) {
       return {
         status: 500,
