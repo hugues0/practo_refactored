@@ -4,6 +4,9 @@ const validateUser = require("../middlewares/usersvalidation");
 const response = require("../helpers/response");
 const UsersServices = require("../services/users");
 const generateToken = require('../helpers/tokengen');
+const encryptPassword = require('../helpers/encryptor');
+const decryptPasswword = require('../helpers/decryptor');
+const passwordDecryptor = require("../helpers/decryptor");
 require("dotenv").config();
 
 
@@ -22,8 +25,8 @@ module.exports = class usersController {
           "User already exist in the database",
           true
         );
-      const saltRounds = 10;
-      password = await bcrypt.hash(password, saltRounds);
+      //const saltRounds = 10;
+      password = await encryptPassword(password);
       console.log(password);
       const newUser = { username, password };
       await UsersServices.createUser(newUser);
@@ -62,7 +65,7 @@ module.exports = class usersController {
           "Invalid username,try again",
           true
         );
-      const passwordMatch = await bcrypt.compare(password, userExist.password);
+      const passwordMatch = await passwordDecryptor(password, userExist.password);
       if (!passwordMatch)
         return res
           .status(401)
