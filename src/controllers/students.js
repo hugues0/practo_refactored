@@ -23,8 +23,6 @@ module.exports = class studentsController {
   }
 
   static async postIn(req, res) {
-    const { error } = validateStudent(req.body);
-    if (error) return res.status(404).send(error.details[0].message);
     try {
       const newStudent = await StudentServices.CreateStudent(req.body);
       return response.successResponse(res,201,"Student successfully registered",{name: newStudent.name});
@@ -55,8 +53,6 @@ module.exports = class studentsController {
         const data = null;
         return response.errorResponse(res,"No student with that given ID in the database",404);
       }
-      const { error } = validateStudent(req.body);
-      if (error) return res.status(404).send(error.details[0].message);
       const newName = req.body.name;
       const id = req.params.id;
       await StudentServices.updateStudentById(id,newName);
