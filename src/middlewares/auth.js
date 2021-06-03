@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const users = require("../models/users");
 const response = require("../helpers/response");
 //const JWT = require('../controllers/userscontroller');
 

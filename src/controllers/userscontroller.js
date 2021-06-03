@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const validateUser = require("../middlewares/usersvalidation");
-const users = require("../models/users");
 const response = require("../helpers/response");
 const UsersServices = require("../services/users");
+const generateToken = require('../helpers/tokengen');
 require("dotenv").config();
 
 
@@ -30,9 +30,7 @@ module.exports = class usersController {
       const userInfo = { ...newUser };
       delete userInfo.password;
 
-      const token = jwt.sign({ username: newUser.username }, process.env.JWT, {
-        expiresIn: 12000,
-      });
+      const token = generateToken({username: newUser.username});
       const data = {
         token,
         userInfo,
@@ -71,9 +69,7 @@ module.exports = class usersController {
           .json({ status: 401, error: "Invalid password, try again" });
       const { id } = userExist;
 
-      const token = jwt.sign({ id }, process.env.JWT, {
-        expiresIn: 12000,
-      });
+      const token = generateToken({ id });
       const data = { id, username, token };
       return response.response(
         res,

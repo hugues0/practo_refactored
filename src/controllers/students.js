@@ -3,7 +3,6 @@ const express = require("express");
 //const Joi = require("joi");
 require("dotenv").config();
 const validateStudent = require("../middlewares/studentvalidation");
-const students = require("../models/studentsmodel");
 const StudentServices = require("../services/students");
 const response = require("../helpers/response");
 
