@@ -3,7 +3,6 @@ const express = require("express");
 //const Joi = require("joi");
 require("dotenv").config();
 const validateStudent = require("../middlewares/studentvalidation");
-const students = require("../models/studentsmodel");
 const StudentServices = require("../services/students");
 const response = require("../helpers/response");
 
@@ -15,43 +14,20 @@ module.exports = class studentsController {
       console.log("===========>>", getStudents.rows);
       if (getStudents.count <= 0) {
         const data = null;
-        return response.response(
-          res,
-          404,
-          "No students registered yet",
-          data,
-          false
-        );
+        return response.successResponse(res,404,"No students registered yet");
       }
-      return response.response(
-        res,
-        200,
-        "list of students",
-        getStudents,
-        false
-      );
+      return response.successResponse(res,200,"list of students",getStudents);
     } catch (error) {
-      return response.response(res, 500, "error", error.message, true);
+      return response.errorResponse(res,error.message, 500);
     }
   }
 
   static async postIn(req, res) {
-    const { error } = validateStudent(req.body);
-    if (error) return res.status(404).send(error.details[0].message);
     try {
       const newStudent = await StudentServices.CreateStudent(req.body);
-      //const { data } = newStudent;
-      return response.response(
-        res,
-        201,
-        "Student successfully registered",
-        {
-          name: newStudent.name,
-        },
-        false
-      );
+      return response.successResponse(res,201,"Student successfully registered",{name: newStudent.name});
     } catch (error) {
-      return response.response(res, 500, "", error.details[0].message, true);
+      return response.errorResponse(res,error.message, 500);
     }
   }
 
@@ -61,17 +37,11 @@ module.exports = class studentsController {
       const student = await StudentServices.findStudentById(req.params.id);
       if ( !student || student.count <= 0 ) {
         const data = null;
-        return response.response(
-          res,
-          404,
-          "No student with that given ID in the database",
-          data,
-          false
-        );
+        return response.errorResponse(res,"No student with that given ID in the database",404);
       }
-      return response.response(res, 200, "Student found", student, false);
+      return response.successResponse(res, 200, "Student found", student);
     } catch (error) {
-      return response.response(res, 500, "", error.message, true);
+      return response.errorResponse(res, error.message, 500);
     }
   }
 
@@ -81,30 +51,14 @@ module.exports = class studentsController {
       const student = await StudentServices.findStudentById(req.params.id);
       if (!student || student.count <= 0) {
         const data = null;
-        return response.response(
-          res,
-          404,
-          "No student with that given ID in the database",
-          data,
-          false
-        );
+        return response.errorResponse(res,"No student with that given ID in the database",404);
       }
-      const { error } = validateStudent(req.body);
-      if (error) return res.status(404).send(error.details[0].message);
       const newName = req.body.name;
       const id = req.params.id;
-      const updateStudent = await StudentServices.updateStudentById(id,newName);
-      return response.response(
-        res,
-        201,
-        "Student successfully updated",
-        {
-          name: newName,
-        },
-        false
-      );
+      await StudentServices.updateStudentById(id,newName);
+      return response.response(res,202,"Student successfully updated",{name: newName});
     } catch (error) {
-      return response.response(res, 500, "", error.details[0].message, true);
+      return response.errorResponse(res, error.message, 500);
     }
   }
 
@@ -113,25 +67,13 @@ module.exports = class studentsController {
       const student = await StudentServices.findStudentById(req.params.id);
       if (!student || student.count <= 0) {
         const data = null;
-        return response.response(
-          res,
-          404,
-          "No student with that given ID in the database",
-          data,
-          false
-        );
+        return response.errorResponse(res,"No student with that given ID in the database",404);
       }
       await StudentServices.deleteStudentById(req.params.id);
       const data = null;
-      return response.response(
-        res,
-        200,
-        "Student successfully deleted",
-        data,
-        false
-      );
+      return response.successResponse(res,200,"Student successfully deleted");
     } catch (err) {
-      return response.response(res, 500, "", error.details[0].message, true);
+      return response.errorResponse(res, error.message, 500);
     }
   }
 };

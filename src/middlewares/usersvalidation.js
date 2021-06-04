@@ -9,7 +9,7 @@ module.exports = function validateUser(req,res,next){
     //return Joi.validate(user, schema);
     
     const {error} = Joi.validate(req.body,schema);
-    if (error) return response.response(res,422,'error',`${error.details[0].message}`,true);
+    if (error) return response.errorResponse(res,`${error.details[0].message}`,422);
     next();
 
     };
