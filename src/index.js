@@ -4,12 +4,13 @@ const app = express();
 const logger = require("./middlewares/logger");
 
 const morgan = require("morgan");
-
+const cors = require ("cors");
 const studentroute = require("./routes/studentroute");
 const usersroute = require("./routes/usersroute");
 
 require("dotenv").config();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -23,3 +24,5 @@ app.use("*", (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));
+
+module.exports = app;
