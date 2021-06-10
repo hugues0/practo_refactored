@@ -1,8 +1,8 @@
-const sequelize = require("sequelize");
-const db = require("../db/models");
-const { op, where, cast, col } = sequelize;
+import sequelize from 'sequelize';
+import db from '../db/models';
+import { op, where, cast, col } from 'sequelize';
 
-module.exports = class StudentsServices {
+ class StudentsServices {
   static async CreateStudent(newStudent) {
     return db.student.create(newStudent);
   }
@@ -59,3 +59,5 @@ module.exports = class StudentsServices {
     }
   }
 };
+
+export default StudentsServices;

@@ -1,12 +1,12 @@
-const express = require("express");
+import express  from 'express';
 //const router = express.Router();
 //const Joi = require("joi");
 require("dotenv").config();
-const validateStudent = require("../middlewares/studentvalidation");
-const StudentServices = require("../services/students");
-const response = require("../helpers/response");
+import validateStudent from '../middlewares/studentvalidation';
+import StudentServices from '../services/students';
+import response from '../helpers/response';
 
-module.exports = class studentsController {
+class studentsController {
   static async getAll(req, res) {
     // res.send(students);
     try {
@@ -77,3 +77,5 @@ module.exports = class studentsController {
     }
   }
 };
+
+export default studentsController;

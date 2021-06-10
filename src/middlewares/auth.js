@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const response = require("../helpers/response");
+import jwt from 'jsonwebtoken';
+import response from '../helpers/response';
 
 
-module.exports = function auth(req, res, next) {
+function auth(req, res, next) {
   const token = req.header("token");
   if (!token) {
     return response.response(
@@ -22,3 +22,5 @@ module.exports = function auth(req, res, next) {
   }
   return token;
 };
+
+export default auth;

@@ -1,9 +1,9 @@
 
-const express = require('express');
+import express from'express';
+import auth from '../middlewares/auth';
+import studentsController from '../controllers/students';
+import validateStudent from '../middlewares/studentvalidation';
 const router = express.Router();
-const auth = require('../middlewares/auth');
-const studentsController = require('../controllers/students');
-const validateStudent = require('../middlewares/studentvalidation');
 const { getAll, postIn, getById,updateById, deleteById } = studentsController;
 
 
@@ -13,4 +13,4 @@ router.delete('/students/:id',auth,deleteById);
 router.get('/students',auth,getAll);
 router.get('/students/:id',auth,getById);
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const Joi = require('joi');
+import Joi  from 'joi';
 //const { noExtendLeft } = require('sequelize/types/lib/operators');
-const response = require('../helpers/response');
+import response from '../helpers/response';
 
-module.exports = function validateStudent(req,res,next){
+ function validateStudent(req,res,next){
      const schema = {
         name: Joi.string().min(3).required(),
     };
@@ -13,3 +13,5 @@ module.exports = function validateStudent(req,res,next){
     next();
     
     };
+
+    export default validateStudent;
