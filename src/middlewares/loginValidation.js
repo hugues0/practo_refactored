@@ -1,7 +1,7 @@
-const Joi = require('joi');
-const response = require('../helpers/response');
+import Joi from 'joi';
+import response from '../helpers/response';
 
-module.exports = function validateLogin(req,res,next){
+function validateLogin(req,res,next){
      const schema = {
         username: Joi.string().required().email(),
         password: Joi.string().required().min(5),
@@ -13,3 +13,4 @@ module.exports = function validateLogin(req,res,next){
     next();
 
     };
+export default validateLogin;

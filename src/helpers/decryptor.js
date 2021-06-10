@@ -1,8 +1,8 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 const passwordDecryptor = (password,hashedPassword) =>{
     return bcrypt.compare(password,hashedPassword);
 
 };
 
-module.exports = passwordDecryptor;
+export default passwordDecryptor;
