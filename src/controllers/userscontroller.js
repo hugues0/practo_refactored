@@ -1,15 +1,17 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const validateUser = require("../middlewares/usersvalidation");
-const response = require("../helpers/response");
-const UsersServices = require("../services/users");
-const generateToken = require('../helpers/tokengen');
-const encryptPassword = require('../helpers/encryptor');
-const decryptPasswword = require('../helpers/decryptor');
+//const jwt = require("jsonwebtoken");
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+//const bcrypt = require("bcrypt");
+import validateUser from '../middlewares/usersvalidation';
+import response from '../helpers/response';
+import UsersServices from '../services/users';
+import generateToken from '../helpers/tokengen';
+import encryptPassword from '../helpers/encryptor';
+import decryptPasswword from '../helpers/decryptor';
 require("dotenv").config();
 
 
-module.exports = class usersController {
+class usersController {
   //register a new user
   static async addUser(req, res) {
     try {
@@ -56,3 +58,5 @@ module.exports = class usersController {
     }
   }
 };
+
+export default usersController;

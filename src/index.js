@@ -1,15 +1,13 @@
-const express = require("express");
-const app = express();
-
-const logger = require("./middlewares/logger");
-
-const morgan = require("morgan");
-
-const studentroute = require("./routes/studentroute");
-const usersroute = require("./routes/usersroute");
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import studentroute from './routes/studentroute';
+import usersroute from "./routes/usersroute";
+import logger from './middlewares/logger';
 
 require("dotenv").config();
-
+const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -23,3 +21,5 @@ app.use("*", (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));
+
+export default app;
