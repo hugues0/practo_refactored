@@ -4,6 +4,8 @@ import cors from 'cors';
 import studentroute from './routes/studentroute';
 import usersroute from "./routes/usersroute";
 import logger from './middlewares/logger';
+import response from './helpers/response';
+
 
 require("dotenv").config();
 const app = express();
@@ -18,6 +20,7 @@ app.use(logger);
 app.use("*", (req, res) => {
   response.response(res, 404, "error", "resource not found", true);
 });
+app.get('/',(req,res) => res.status(200).send({status:200,message:'Welcome to this web app home page'}));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));

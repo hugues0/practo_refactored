@@ -17,11 +17,9 @@ class usersController {
     try {
       let { username, password } = req.body;
       const existUser = await UsersServices.findUserByEmail(username);
-      console.log(existUser);
       if (existUser)
         return response.errorResponse(res,"User already exist in the database",409);
       password = await encryptPassword(password);
-      console.log(password);
       const newUser = { username, password };
       await UsersServices.createUser(newUser);
       const userInfo = { ...newUser };
