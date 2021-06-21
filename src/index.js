@@ -16,7 +16,7 @@ app.use(express.static("public"));
 app.use(morgan("tiny"));
 app.use("/api/v1", studentroute);
 app.use("/api/v1", usersroute);
-app.use(logger);
+//app.use(logger);
 app.use("*", (req, res) => {
   response.response(res, 404, "error", "resource not found", true);
 });
