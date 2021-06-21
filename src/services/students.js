@@ -7,16 +7,6 @@ import { op, where, cast, col } from 'sequelize';
     return db.student.create(newStudent);
   }
 
-  static async getStudents() {
-    try {
-      console.log("===========>>", model);
-      const searchStudents = await db.student.findAll();
-      if (!searchStudents) return null;
-      return searchStudents;
-    } catch (error) {
-      return undefined;
-    }
-  }
 
   static async getStudents02() {
     return await db.student.findAndCountAll({

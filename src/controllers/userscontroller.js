@@ -43,10 +43,10 @@ class usersController {
 
       const userExist = await UsersServices.findUserByEmail(username);
       if (!userExist)
-        return response.errorResponse(res,"Invalid credentials,try again",404);
+        return response.errorResponse(res,"Invalid credentials,try again",401);
       const passwordMatch = await decryptPasswword(password, userExist.password);
       if (!passwordMatch)
-        return response.errorResponse(res, "Invalid credentials,try again", 404);
+        return response.errorResponse(res, "Invalid credentials,try again", 401);
       const { id } = userExist;
       const token = generateToken({ id });
       const data = { id, username, token };

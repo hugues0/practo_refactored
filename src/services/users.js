@@ -10,15 +10,6 @@ class UsersServices {
     }
   }
 
-  static async findUserById(id) {
-    try {
-      const user = await db.user.findOne({ where: { id } });
-      if (!user) return null;
-      return user;
-    } catch (er) {
-      return undefined;
-    }
-  }
 
   static async findUserByEmail(username) {
     try {
@@ -30,31 +21,6 @@ class UsersServices {
     }
   }
 
-  static async deleteUserById(id) {
-    try {
-      await db.user.destroy({ where: { id } });
-      return {
-        status: 200,
-        message: "User successfully deleted",
-      };
-    } catch (er) {
-      return {
-        status: 500,
-        message: er,
-      };
-    }
-  }
-
-  static async updateStudentById(id, username, password) {
-    try {
-      return await db.user.update({ username, password }, { where: { id } });
-    } catch (er) {
-      return {
-        status: 500,
-        message: er,
-      };
-    }
-  }
 };
 
 export default UsersServices;

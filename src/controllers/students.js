@@ -11,7 +11,7 @@ class studentsController {
     // res.send(students);
     try {
       const getStudents = await StudentServices.getStudents02();
-      console.log("===========>>", getStudents.rows);
+      //console.log("===========>>", getStudents.rows);
       if (getStudents.count <= 0) {
         const data = null;
         return response.successResponse(res,404,"No students registered yet");
